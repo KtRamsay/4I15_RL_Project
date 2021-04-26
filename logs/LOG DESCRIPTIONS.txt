@@ -1,0 +1,169 @@
+LOG DESCRIPTIONS
+##########################################################################################
+BASE SETTINGS:
+    HIDDEN_SIZE = 128
+    HIDDEN_SIZE2 = 100
+    BATCH_SIZE = 32
+    GAMMA = 0.9
+    TARGET_UPDATE = 10
+    MAX_EPISODE_ITERS = 50
+    EPISODES = 2000
+    SEE_EPIDODE = 200
+    EPSILON = 1
+    EPSILON_DECAY = 1/(MAX_EPISODE_ITERS*1000)
+    EPSILON_END = 0.1
+    SAVE_EVERY = 500
+
+    totBlocks = 5
+    mapWidth = 5
+    mapHeight = 5
+    waypointDist = 2
+    observationDist = 2 #Must be divisible by 2
+    obsPixleDensity = 10 #Number of pixles per unit cell of map at highest resolution
+    turnMemorySize = 6
+    allowedPositionError = 0.1
+    allowedBearingError = 5 #In degrees
+
+    stepReward = -1
+    spinReward = -5
+    collisionReward = -1000
+    perfectWaypointReward = 1000
+    wayPointPositionReward = 500
+
+    maxSpeed = 0.1
+    maxTurnRate = np.pi/6
+
+    smoothInput = True
+
+##########################################################################################
+Trial Runs:
+
+Ongoing: Random trial runs
+
+
+TestRewards: 
+    1: Trying new rewards to encorage exploration
+        stepReward = -1
+        spinReward = -5
+        collisionReward = -200
+        perfectWaypointReward = 2000
+        wayPointPositionReward = 1000
+
+    2: Increased cost to spinning
+        stepReward = -1
+        spinReward = -50
+        collisionReward = -200
+        perfectWaypointReward = 2000
+        wayPointPositionReward = 1000
+
+WaypointOnlyTest:
+    1: Remove surroundings information, just learn off waypoint data (state just additionaldata), also allow clipping
+        stepReward = -10
+        spinReward = 0
+        collisionReward = 0
+        perfectWaypointReward = 100
+        wayPointPositionReward = 50
+    2: Same as above but trying only waypoint reached rewards
+        stepReward = -1
+        spinReward = 0
+        collisionReward = 0
+        perfectWaypointReward = 10
+        wayPointPositionReward = 0
+    Final model number: 1618578897
+    3: Tried splitting reward so position can be rewarded without bearing
+        stepReward = -1
+        spinReward = 0
+        collisionReward = 0
+        perfectWaypointPositionReward = 5
+        perfectWaypointBearingReward = 15
+        wayPointPositionReward = 0
+    Final model number: 1618582380
+    4: As above but add bearing cost/reward based on difference to desired
+        stepReward = -1
+        spinReward = 0
+        collisionReward = 0
+        perfectWaypointPositionReward = 2
+        perfectWaypointBearingReward = 10
+        wayPointPositionReward = 0
+    Final model number: 1618585567
+    5: As above but altered position errors and lowered bearing reward
+            
+        perfectWaypointBearingReward = 5
+        allowedPositionError = 0.3
+        allowedBearingError = 15 #In degrees
+
+CircleObs:
+    1: Added back in collisions ans observation space but with smaller CNN output and circle map obstructions
+        stepReward = -1
+        spinReward = -2
+        collisionReward = -10
+        perfectWaypointPositionReward = 2
+        perfectWaypointBearingReward = 5
+        wayPointPositionReward = 0
+    Final model number: 1618688305
+Clipping:
+    1: New set for no clipping, no observation space, just waypoint targeting
+        allowedPositionError = 0.3
+        allowedBearingError = 15 #In degrees
+        stepReward = -1
+        spinReward = -4
+        collisionReward = -10
+        perfectWaypointPositionReward = 4
+        perfectWaypointBearingReward = 8
+        wayPointPositionReward = 0
+        smoothInput = True
+        circleMap = True
+        allowClipping = True
+        useObservationSpace = False
+    2: New set for no clipping, no observation space, just waypoint targeting, position reward is negative distance
+        allowedPositionError = 0.3
+        allowedBearingError = 15 #In degrees
+        stepReward = -1
+        spinReward = -4
+        collisionReward = -10
+        perfectWaypointPositionReward = 0
+        perfectWaypointBearingReward = 8
+        wayPointPositionReward = 0
+        smoothInput = True
+        circleMap = True
+        allowClipping = True
+        useObservationSpace = False
+    Final model number: 1619019222
+    3: No observation space, bearing not needed, position reward negative distance
+        allowedPositionError = 0.3
+        allowedBearingError = 15 #In degrees
+        stepReward = -1
+        spinReward = -4
+        collisionReward = -10
+        perfectWaypointPositionReward = 0
+        perfectWaypointBearingReward = 0
+        wayPointPositionReward = 0
+        smoothInput = True
+        circleMap = True
+        allowClipping = True
+        useObservationSpace = False
+        requireBearing = False
+    Final model number: 1619026982
+    4: No observation space, bearing not needed, position reward negative distance, passed waypoint and current yaw
+        allowedPositionError = 0.3
+        allowedBearingError = 15 #In degrees
+        stepReward = -1
+        spinReward = -4
+        collisionReward = -10
+        perfectWaypointPositionReward = 0
+        perfectWaypointBearingReward = 0
+        wayPointPositionReward = 0
+        smoothInput = True
+        circleMap = True
+        allowClipping = True
+        useObservationSpace = False
+        requireBearing = False
+    Final model number: 1619031367
+    5: As above but added value of yaw difference to point at waypoint
+    Final model number: 1619039785
+MinimumInfo:
+    1. All input data rounded to 2dp, input absolute distance to target, target and robot yaw, and yaw additional yaw to face target
+best: "1619124754"
+    2. Add reward for facing to waypoint direction when sat on waypoint
+MinimumInfo3:
+    1.Just position and waypoint, no collisions
