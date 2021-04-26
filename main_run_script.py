@@ -11,7 +11,6 @@ import os
 from map_generation import resetMap
 from observation_functions import getObsSpaceRepresentation
 from plot_functions import plotLifespanBar, plotMap, plotObservationInput
-from ornstein_uhlenbeck import ornstein_uhlenbeck
 
 import torch 
 import torch.nn as nn
